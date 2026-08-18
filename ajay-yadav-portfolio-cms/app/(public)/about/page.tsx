@@ -1,27 +1,19 @@
-import type { Metadata } from "next";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { createClient } from "@/lib/supabase/server";
+import { EmptyState } from "@/components/ui/EmptyState";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: "About Ajay Yadav — web developer and technologist.",
+export const metadata = {
+  title: "About Me",
+  description: "Learn more about Ajay Yadav, my background, and my journey.",
 };
 
-export const revalidate = 300;
-
-export default async function AboutPage() {
-  const supabase = createClient();
-  const { data: profile } = await supabase.from("profile").select("*").single();
-
+export default function AboutPage() {
   return (
-    <section className="mx-auto max-w-3xl px-4 py-16">
-      <SectionHeading eyebrow="About Me" title="My Story" />
-      <div className="prose prose-neutral mt-10 max-w-none dark:prose-invert">
-        <p>
-          {profile?.bio ??
-            "Add your professional story, journey, interests, and goals from Admin → About. This is placeholder content until then."}
-        </p>
-      </div>
+    <section className="mx-auto max-w-6xl px-4 py-16">
+      <SectionHeading eyebrow="About" title="About Me" />
+      <EmptyState
+        title="About page coming soon"
+        description="This page is currently under development. Check back soon!"
+      />
     </section>
   );
 }
