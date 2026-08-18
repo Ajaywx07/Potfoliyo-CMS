@@ -38,6 +38,21 @@ identical CRUD screens, keeps the codebase reviewable and avoids
 5. In Supabase Auth, manually create your one admin user (email + password) — this is intentional; there is no public sign-up
 6. `npm run dev` → http://localhost:3000, admin at http://localhost:3000/admin/login
 
+### Environment variables (important)
+
+This project separates public (client) Supabase envs used in the browser from server-only envs used on the server and in middleware.
+
+- Public (browser) envs — used by client components (keep these prefixed with NEXT_PUBLIC_):
+  - NEXT_PUBLIC_SUPABASE_URL
+  - NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+- Server-only envs — must NOT be exposed to the client (do NOT prefix with NEXT_PUBLIC_):
+  - SUPABASE_URL
+  - SUPABASE_ANON_KEY
+  - SUPABASE_SERVICE_ROLE_KEY (admin-only; never expose this to client bundles)
+
+When deploying (e.g., Vercel) set both the NEXT_PUBLIC_* vars and the server-only vars in the project settings. Never commit service role keys to source control.
+
 ## Deployment
 
 - Push to GitHub, import into Vercel, add the same env vars from `.env.local` in Vercel's project settings
