@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
 
-export default function AdminLoginPage() {
+function AdminLoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState("");
@@ -37,28 +37,36 @@ export default function AdminLoginPage() {
   }
 
   return (
+    <div className="w-full max-w-sm rounded-lg border border-border bg-background p-8 shadow-sm">
+      <h1 className="font-heading text-xl font-bold">Admin Login</h1>
+      <p className="mt-1 text-sm text-muted">Sign in to manage your site content.</p>
+
+      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        <div>
+          <label htmlFor="email" className="mb-1 block text-sm font-medium">Email</label>
+          <input id="email" name="email" type="email" required autoComplete="username" className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+        </div>
+        <div>
+          <label htmlFor="password" className="mb-1 block text-sm font-medium">Password</label>
+          <input id="password" name="password" type="password" required autoComplete="current-password" className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+        </div>
+
+        {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
+
+        <Button type="submit" isLoading={loading} className="w-full">
+          Sign In
+        </Button>
+      </form>
+    </div>
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
     <div className="flex min-h-screen items-center justify-center bg-surface px-4">
-      <div className="w-full max-w-sm rounded-lg border border-border bg-background p-8 shadow-sm">
-        <h1 className="font-heading text-xl font-bold">Admin Login</h1>
-        <p className="mt-1 text-sm text-muted">Sign in to manage your site content.</p>
-
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium">Email</label>
-            <input id="email" name="email" type="email" required autoComplete="username" className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
-          </div>
-          <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium">Password</label>
-            <input id="password" name="password" type="password" required autoComplete="current-password" className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm" />
-          </div>
-
-          {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
-
-          <Button type="submit" isLoading={loading} className="w-full">
-            Sign In
-          </Button>
-        </form>
-      </div>
+      <Suspense fallback={<div className="text-sm text-muted">Loading login...</div>}>
+        <AdminLoginForm />
+      </Suspense>
     </div>
   );
 }
