@@ -21,8 +21,12 @@ export function Header() {
 
   const cycleTheme = () => {
     const order: Array<typeof theme> = ["light", "dark", "system"];
-    const next = order[(order.indexOf(theme) + 1) % order.length];
-    setTheme(next);
+    const nextIndex = (order.indexOf(theme) + 1) % order.length;
+    const next = order[nextIndex];
+
+    if (next) {
+      setTheme(next);
+    }
   };
 
   const ThemeIcon = theme === "light" ? Sun : theme === "dark" ? Moon : Laptop;
