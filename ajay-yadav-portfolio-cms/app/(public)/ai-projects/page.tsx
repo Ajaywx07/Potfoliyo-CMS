@@ -1,33 +1,19 @@
-import type { Metadata } from "next";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { ProjectCard } from "@/components/sections/ProjectCard";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "AI Projects" };
-export const revalidate = 60;
+export const metadata = {
+  title: "AI Projects",
+  description: "Explore my AI and machine learning projects.",
+};
 
-export default async function Page() {
-  const supabase = createClient();
-  const { data: projects } = await supabase
-    .from("projects")
-    .select("slug, name, short_description, featured_image, technologies, category")
-    .eq("status", "published")
-    .eq("category", "ai")
-    .order("display_order", { ascending: true });
-
+export default function AIProjectsPage() {
   return (
     <section className="mx-auto max-w-6xl px-4 py-16">
-      <SectionHeading eyebrow="AI Projects" title="AI Projects" description="AI-related projects and experiments. None are claimed production-ready unless explicitly stated." />
-      <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {projects && projects.length > 0 ? (
-          projects.map((project) => <ProjectCard key={project.slug} project={project} />)
-        ) : (
-          <div className="sm:col-span-2 lg:col-span-3">
-            <EmptyState title="Nothing published in this category yet" description="Add projects with this category from Admin → Projects." />
-          </div>
-        )}
-      </div>
+      <SectionHeading eyebrow="AI" title="AI & Machine Learning Projects" />
+      <EmptyState
+        title="AI Projects coming soon"
+        description="This page is currently under development. Check back soon!"
+      />
     </section>
   );
 }
